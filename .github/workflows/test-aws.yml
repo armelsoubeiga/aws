@@ -6,23 +6,26 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    environment: aws   # <-- IMPORTANT !!!
+    environment: aws
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: DEBUG region
+      - name: Show debug (presence secrets)
         run: |
-          echo ">>>> DEBUG: secret AWS_REGION length:"
-          if [ -z "${{ secrets.AWS_REGION }}" ]; then
-            echo "AWS_REGION is EMPTY"
+          if [ -z "${{ secrets.AWS_SESSION_TOKEN }}" ]; then
+            echo "SESSION_TOKEN is EMPTY"
           else
-            echo "AWS_REGION=${{ secrets.AWS_REGION }}"
+            echo "SESSION_TOKEN is SET (masked)"
           fi
 
-      - name: Configure AWS Credentials
+      - name: Configure AWS Credentials (with session token)
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Test identity
+        run: aws sts get-caller-identity
