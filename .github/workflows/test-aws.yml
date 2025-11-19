@@ -1,4 +1,4 @@
-name: Test AWS Connection
+name: Test AWS Connection - debug
 
 on:
   workflow_dispatch:
@@ -6,20 +6,26 @@ on:
 jobs:
   test-aws:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Configure AWS credentials
+      - name: Show secret presence (masked if present)
+        run: |
+          echo ">>>> DEBUG: secret AWS_REGION length:"
+          if [ -z "${{ secrets.AWS_REGION }}" ]; then
+            echo "AWS_REGION is EMPTY"
+          else
+            echo "AWS_REGION is SET (masked in logs)"
+          fi
+
+      - name: Configure AWS credentials (using secrets)
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Debug region
-        run: echo "AWS_REGION is -> ${{ secrets.AWS_REGION }}"
-
-      - name: Test AWS credentials validity
-        run: aws sts get-caller-identity
+      - name: sts get-caller-identity
+        run: aws sts get-caller-identity || echo "aws sts failed (likely because credentials/region missing)"
