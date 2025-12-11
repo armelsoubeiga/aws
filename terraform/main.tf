@@ -39,8 +39,9 @@ module "ecs_G0MG00" {
 }
 
 # App Runner Service Module
-module "apprunner_G0MG00" {
-  source       = "./modules/apprunner"
-  service_name = "apprunner-g0mg00"
-  ecr_repo_url = module.ecr_G0MG00.repository_url
-}
+# Décommenté quand vous avez une image Docker dans ECR
+# module "apprunner_G0MG00" {
+#   source       = "./modules/apprunner"
+#   service_name = "apprunner-g0mg00"
+#   ecr_repo_url = module.ecr_G0MG00.repository_url
+# }

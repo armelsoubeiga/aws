@@ -18,12 +18,12 @@ output "ecs_task_execution_role_arn" {
   value       = module.ecs_G0MG00.task_execution_role_arn
 }
 
-output "apprunner_service_url" {
-  description = "URL of the App Runner service"
-  value       = module.apprunner_G0MG00.service_url
-}
+# output "apprunner_service_url" {
+#   description = "URL of the App Runner service"
+#   value       = module.apprunner_G0MG00.service_url
+# }
 
-output "apprunner_service_arn" {
-  description = "ARN of the App Runner service"
-  value       = module.apprunner_G0MG00.service_arn
-}
+# output "apprunner_service_arn" {
+#   description = "ARN of the App Runner service"
+#   value       = module.apprunner_G0MG00.service_arn
+# }
